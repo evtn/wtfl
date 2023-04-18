@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import Literal, Protocol, TypeVar, Union
+from typing import Literal, Protocol, TypeVar, Union, List
 import random
 
-KeyChain = list[str]
+KeyChain = List[str]
 
 
 def _randomchar(_: int) -> str:
@@ -63,7 +63,7 @@ class Assign(Operation):
         op.offset = self.offset
         return op
 
-    def unwind(self, prefix: KeyChain) -> list[Assign]:
+    def unwind(self, prefix: KeyChain) -> List[Assign]:
         if not isinstance(self.value, Object):
             return [self.rebase(prefix)]
 
@@ -74,13 +74,13 @@ class Assign(Operation):
 
 
 class Object:
-    def __init__(self, pairs: list[Assign]):
+    def __init__(self, pairs: List[Assign]):
         self.pairs = pairs
 
     def __repr__(self):
         return f'[{",".join(map(repr, self.pairs))}]'
 
-    def flatten_paths(self, prefix: KeyChain) -> list[Assign]:
+    def flatten_paths(self, prefix: KeyChain) -> List[Assign]:
         new_pairs = []
         for pair in self.pairs:
             new_pairs.extend(pair.unwind(prefix))

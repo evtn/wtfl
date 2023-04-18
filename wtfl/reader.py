@@ -1,6 +1,6 @@
 from __future__ import annotations
 from logging import warn
-from typing import Sequence, Union
+from typing import List, Sequence, Union, Dict, Tuple
 from .internal_types import (
     ARRAY_KEY,
     Constraint,
@@ -14,13 +14,13 @@ from .parser import parse, Assign
 
 StateValue = Union[str, float, bool, None, "Store"]
 PythonValue = Union[
-    str, float, bool, None, dict[str, "PythonValue"], list["PythonValue"]
+    str, float, bool, None, Dict[str, "PythonValue"], List["PythonValue"]
 ]
 
 
 class Store:
     def __init__(self) -> None:
-        self.keys: dict[str, StateValue] = {}
+        self.keys: Dict[str, StateValue] = {}
         self.is_array: bool = False
         self.can_be_array: bool = True
 
@@ -44,7 +44,7 @@ class Store:
 
     def to_python_value(self) -> PythonValue:
         if self.is_array:
-            result_list: list[PythonValue] = []
+            result_list: List[PythonValue] = []
             last_index = -1
             warned_about_holes = False
 
@@ -64,7 +64,7 @@ class Store:
                 last_index = index
             return result_list
 
-        result_dict: dict[str, PythonValue] = {}
+        result_dict: Dict[str, PythonValue] = {}
 
         for key, value in self.keys.items():
             if isinstance(value, Store):
@@ -88,7 +88,7 @@ class Store:
 
 class ReadState:
     def __init__(self) -> None:
-        self.constraints: dict[tuple[str, ...], list[Constraint]] = {}
+        self.constraints: Dict[Tuple[str, ...], List[Constraint]] = {}
         self.keys = Store()
 
     def create_path(self, path: KeyChain):
@@ -147,12 +147,12 @@ class Reader:
         state = ReadState()
         tree = parse(s.lower())
 
-        statements: list[tuple[Operation, int]] = []
+        statements: List[Tuple[Operation, int]] = []
 
         for i, operation in enumerate(tree):
             statements.extend((op, i) for op in self.process_operation(operation))
 
-        def key_func(statement: tuple[Operation, int]) -> float:
+        def key_func(statement: Tuple[Operation, int]) -> float:
             [operation, index] = statement
 
             if operation.offset:

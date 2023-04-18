@@ -1,9 +1,10 @@
+from typing import Dict, List
 from .internal_types import SupportsWrite
 from .reader import PythonValue
 from json import dumps as jd
 import random
 
-_kws: dict[str, list[str]] = {
+_kws: Dict[str, List[str]] = {
     "have": ["have", "has", "'ve"],
     "that": ["that", "this", "these", "those"],
     "true": ["true", "falsen't"],
@@ -24,12 +25,12 @@ def _add_tab(text: str) -> str:
     return tab_char + text.replace("\n", "\n" + tab_char)
 
 
-def _make_list(obj: list[PythonValue]) -> str:
+def _make_list(obj: List[PythonValue]) -> str:
     entries = "\n".join(map(dumps, obj))
     return f"{_random_kw('have')}\n{_add_tab(entries)}\n{_random_kw('that')}{_random_kw('is')} all"
 
 
-def _make_dict(obj: dict[str, PythonValue], is_toplevel: bool = False) -> str:
+def _make_dict(obj: Dict[str, PythonValue], is_toplevel: bool = False) -> str:
     sep = "\n\n" if is_toplevel else "\n"
 
     entries = sep.join(

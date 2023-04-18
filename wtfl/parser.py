@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 import codecs
-from typing_extensions import reveal_type
+from typing import List, Dict
 
 from lark import Lark, Transformer
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
@@ -10,9 +10,9 @@ from .internal_types import ARRAY_KEY, Also, Constraint, Object, Assign, Operati
 from .grammar import g as grammar  # type: ignore
 
 
-def parse(s: str) -> list[Operation]:
+def parse(s: str) -> List[Operation]:
     try:
-        return typing.cast(list[Operation], _parser.parse(s))
+        return typing.cast(List[Operation], _parser.parse(s))
 
     except UnexpectedCharacters as e:  # type: ignore[misc]
         raise ValueError(
@@ -25,7 +25,7 @@ def parse(s: str) -> list[Operation]:
         ) from None
 
 
-def _unpack(_: object, tokens: list[object]) -> object:
+def _unpack(_: object, tokens: List[object]) -> object:
     return tokens[0]
 
 
@@ -36,7 +36,7 @@ def make_roman_digit(i: int) -> int:
     return base * exponent
 
 
-roman_digits: dict[str, int] = {k: make_roman_digit(i) for i, k in enumerate("IVXLCDM")}
+roman_digits: Dict[str, int] = {k: make_roman_digit(i) for i, k in enumerate("IVXLCDM")}
 
 
 class WTFLTransformer(Transformer):
