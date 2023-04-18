@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Literal, Protocol, TypeVar, Union, List
+from typing import Protocol, TypeVar, Union, List
+from typing_extensions import Literal
 import random
 
 KeyChain = List[str]

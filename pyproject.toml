@@ -8,6 +8,7 @@ authors = ["Dmitry Gritsenko <k01419q45@ya.ru>"]
 python = "^3.10"
 lark = "^1.1.5"
 lark-dynamic = "^1.0.4"
+typing-extensions = "^4.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

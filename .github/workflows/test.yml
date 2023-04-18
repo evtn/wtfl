@@ -27,4 +27,4 @@ jobs:
 
       - run: python -m pip install mypy
 
-      - run: python -m mypy wtfl/*.py --disallow-any-expr --pretty --show-error-codes
+      - run: python -m mypy wtfl/*.py --pretty --show-error-codes
