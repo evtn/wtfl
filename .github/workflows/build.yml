@@ -8,6 +8,9 @@ on:
     paths:
       - pyproject.toml
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
