@@ -1,17 +1,18 @@
 [tool.poetry]
 name = "wtfl"
-version = "1.0.0"
+version = "1.0.1"
 description = ""
 authors = ["Dmitry Gritsenko <k01419q45@ya.ru>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.7"
 lark = "^1.1.5"
 lark-dynamic = "^1.0.4"
 typing-extensions = "^4.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+mypy = "^1.2.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
