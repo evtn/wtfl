@@ -98,7 +98,12 @@ class ReadState:
             if key in store:
                 new_store: StateValue = store[key]
                 if not isinstance(new_store, Store):
-                    raise ValueError("what?", path, key, new_store)
+                    raise ValueError(
+                        "Unknown resolving error occured, report this to the developer",
+                        path,
+                        key,
+                        new_store,
+                    )
             else:
                 new_store = Store()
                 store[key] = new_store
@@ -116,8 +121,35 @@ class ReadState:
 
         store[last_key] = value
 
+    def resolve_path(self, path: KeyChain) -> Store | None:
+        store = self.keys
+
+        for key in path:
+            if key in store:
+                new_store: StateValue = store[key]
+                if not isinstance(new_store, Store):
+                    return None
+            else:
+                return None
+
+            store = new_store
+
+        return store
+
     def add_constraint(self, constraint: Constraint):
         key = constraint.key
+
+        path = list(constraint.key)
+
+        store = self.resolve_path(path)
+
+        if store:
+            for value in store.keys.values():
+                try:
+                    constraint.check(value)
+                except:
+                    warn("Too late, it's already done")
+                    break
 
         if key not in self.constraints:
             self.constraints[key] = []
