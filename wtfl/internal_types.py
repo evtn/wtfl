@@ -5,7 +5,7 @@ import random
 KeyChain = list[str]
 
 
-def _randomchar(_):
+def _randomchar(_: int) -> str:
     return random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{},./\\")
 
 
@@ -58,7 +58,7 @@ class Assign(Operation):
         self.key = key
         self.value = value
 
-    def rebase(self, path: KeyChain):
+    def rebase(self, path: KeyChain) -> Assign:
         op = Assign(path + self.key, self.value)
         op.offset = self.offset
         return op
@@ -74,7 +74,7 @@ class Assign(Operation):
 
 
 class Object:
-    def __init__(self, pairs: list[Assign], is_array: bool = False):
+    def __init__(self, pairs: list[Assign]):
         self.pairs = pairs
 
     def __repr__(self):
@@ -105,4 +105,4 @@ class SupportsWrite(Protocol[_T_contra]):
 Value = Union[str, float, bool, None, Object]
 
 
-ConstraintType = Literal["hastobe"] | Literal["cantbe"] | Literal["cant_exist"]
+ConstraintType = Union[Literal["hastobe"], Literal["cantbe"], Literal["cant_exist"]]

@@ -1,42 +1,45 @@
 from __future__ import annotations
 import typing
 import codecs
+from typing_extensions import reveal_type
 
-from lark import Lark, Transformer, UnexpectedCharacters, UnexpectedToken
+from lark import Lark, Transformer
+from lark.exceptions import UnexpectedCharacters, UnexpectedToken
 
 from .internal_types import ARRAY_KEY, Also, Constraint, Object, Assign, Operation
-from .grammar import g as grammar
+from .grammar import g as grammar  # type: ignore
 
 
 def parse(s: str) -> list[Operation]:
     try:
         return typing.cast(list[Operation], _parser.parse(s))
-    except UnexpectedCharacters as e:
+
+    except UnexpectedCharacters as e:  # type: ignore[misc]
         raise ValueError(
-            f"Unexpected characters at line {e.line} column {e.column}: {e.char}\n{e.get_context(s)}"
+            f"Unexpected characters at line {e.line} column {e.column}: {e.char}\n{e.get_context(s)}"  # type: ignore[misc]
         ) from None
 
-    except UnexpectedToken as e:
+    except UnexpectedToken as e:  # type: ignore[misc]
         raise ValueError(
-            f"Unexpected token at line {e.line} column {e.column}: {e.token}\n{e.get_context(s, 100)}"
+            f"Unexpected token at line {e.line} column {e.column}: {e.token}\n{e.get_context(s, 100)}"  # type: ignore[misc]
         ) from None
 
 
-def _unpack(_, tokens):
+def _unpack(_: object, tokens: list[object]) -> object:
     return tokens[0]
 
 
-roman_digits = {
-    k: ((i % 2) * 4 + 1) * (10 ** (i // 2)) for i, k in enumerate("IVXLCDM")
-}
+def make_roman_digit(i: int) -> int:
+    base: int = (i % 2) * 4 + 1
+    exponent: int = 10 ** (i // 2)
+
+    return base * exponent
+
+
+roman_digits: dict[str, int] = {k: make_roman_digit(i) for i, k in enumerate("IVXLCDM")}
 
 
 class WTFLTransformer(Transformer):
-    def __default__(self, data, children, meta):
-        if not data.startswith("_"):
-            print(data, "is not processed!!!")
-        return super().__default__(data, children, meta)
-
     value = _unpack
     number = _unpack
 
@@ -169,14 +172,8 @@ class WTFLTransformer(Transformer):
 
 
 _parser = Lark(
-    grammar=grammar.generate(),
+    grammar=grammar.generate(),  # type: ignore
     parser="lalr",
     start="file",
     transformer=WTFLTransformer(),
-)
-
-raw_parser = Lark(
-    grammar=grammar.generate(),
-    parser="lalr",
-    start="file",
 )

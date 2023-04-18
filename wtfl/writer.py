@@ -1,9 +1,9 @@
-from wtfl.internal_types import SupportsWrite
-from wtfl.reader import PythonValue
+from .internal_types import SupportsWrite
+from .reader import PythonValue
 from json import dumps as jd
 import random
 
-_kws = {
+_kws: dict[str, list[str]] = {
     "have": ["have", "has", "'ve"],
     "that": ["that", "this", "these", "those"],
     "true": ["true", "falsen't"],
@@ -13,7 +13,7 @@ _kws = {
 }
 
 
-def _random_kw(kw_key: str):
+def _random_kw(kw_key: str) -> str:
     return random.choice(_kws[kw_key])
 
 
@@ -24,12 +24,12 @@ def _add_tab(text: str) -> str:
     return tab_char + text.replace("\n", "\n" + tab_char)
 
 
-def _make_list(obj: list[PythonValue]):
+def _make_list(obj: list[PythonValue]) -> str:
     entries = "\n".join(map(dumps, obj))
     return f"{_random_kw('have')}\n{_add_tab(entries)}\n{_random_kw('that')}{_random_kw('is')} all"
 
 
-def _make_dict(obj: dict[str, PythonValue], is_toplevel: bool = False):
+def _make_dict(obj: dict[str, PythonValue], is_toplevel: bool = False) -> str:
     sep = "\n\n" if is_toplevel else "\n"
 
     entries = sep.join(
@@ -43,15 +43,15 @@ def _make_dict(obj: dict[str, PythonValue], is_toplevel: bool = False):
     return f"{_random_kw('have')}\n{_add_tab(entries)}\n{_random_kw('that')}{_random_kw('is')} all"
 
 
-def dump(file: SupportsWrite[str], obj: PythonValue):
+def dump(file: SupportsWrite[str], obj: PythonValue) -> None:
     file.write(dumps(obj))
 
 
-def dumps(obj: PythonValue):
+def dumps(obj: PythonValue) -> str:
     return _dumps_inner(obj, True)
 
 
-def _dumps_inner(obj: PythonValue, is_toplevel: bool = False):
+def _dumps_inner(obj: PythonValue, is_toplevel: bool = False) -> str:
     if isinstance(obj, list):
         return _make_list(obj)
     if isinstance(obj, dict):

@@ -1,5 +1,4 @@
 from __future__ import annotations
-from json import dumps
 from logging import warn
 from typing import Sequence, Union
 from .internal_types import (
@@ -20,10 +19,10 @@ PythonValue = Union[
 
 
 class Store:
-    def __init__(self):
+    def __init__(self) -> None:
         self.keys: dict[str, StateValue] = {}
-        self.is_array = False
-        self.can_be_array = True
+        self.is_array: bool = False
+        self.can_be_array: bool = True
 
     def add_key(self, key: str, value: StateValue):
         if key == ARRAY_KEY and self.can_be_array:
@@ -88,7 +87,7 @@ class Store:
 
 
 class ReadState:
-    def __init__(self):
+    def __init__(self) -> None:
         self.constraints: dict[tuple[str, ...], list[Constraint]] = {}
         self.keys = Store()
 
@@ -97,7 +96,7 @@ class ReadState:
 
         for key in path:
             if key in store:
-                new_store = store[key]
+                new_store: StateValue = store[key]
                 if not isinstance(new_store, Store):
                     raise ValueError("what?", path, key, new_store)
             else:
@@ -109,7 +108,7 @@ class ReadState:
         return store
 
     def assign_path(self, path: KeyChain, value: Value):
-        store = self.create_path(path[:-1])
+        store: Store = self.create_path(path[:-1])
 
         last_key = path[-1]
 
@@ -139,7 +138,7 @@ class ReadState:
         self.check_constraint(op)
         self.assign_path(op.key, op.value)
 
-    def to_dict(self):
+    def to_dict(self) -> PythonValue:
         return self.keys.to_python_value()
 
 
@@ -180,10 +179,10 @@ class Reader:
             state.add_constraint(operation)
 
 
-def loads(s: str):
-    state = Reader().read(s)
+def loads(s: str) -> PythonValue:
+    state: ReadState = Reader().read(s)
     return state.to_dict()
 
 
-def load(file: SupportsRead[str]):
+def load(file: SupportsRead[str]) -> PythonValue:
     return loads(file.read())
