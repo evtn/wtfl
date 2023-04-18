@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "wtfl"
 version = "1.0.5"
-description = "Well-Designed Text-based Friendly Language"
+description = "Well-designed Text-based Friendly Language"
 authors = ["Dmitry Gritsenko <k01419q45@ya.ru>"]
 license = "MIT"
 readme = "README.md"

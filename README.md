@@ -1,4 +1,4 @@
-# WTFL — Well-Designed Text-based Friendly Language
+# WTFL — Well-designed Text-based Friendly Language
 
 This is a spec for a very well-designed declarative language and a Python package to work with it.    
 Obviously, current solutions for config et al. (JSON, YAML, TOML) are very unsuitable as software development progress is going on, so here I propose a brand new format.   
@@ -52,7 +52,7 @@ Here's a list (keywords in the same list entry are equivalent and used interchan
 - `that` / `this` / `these` / `those`
 - `there`
 - `have` / `has` / `'ve`
-- `haven't` / `hasn't` / `'ve'n't`
+- `haven't` / `hasn't` / `'ven't`
 - `can`
 - `cannot` / `can't`
 - `true` / `falsen't`
