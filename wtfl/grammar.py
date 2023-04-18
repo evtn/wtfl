@@ -30,7 +30,7 @@ g.OF[2] = "of"
 g.THAT[2] = Literal("that") | "this" | "these" | "those"
 g.THERE[2] = "there"
 g.HAVE[2] = Literal("have") | "has" | "'ve"
-g.HAVENT[2] = Literal("haven't") | "hasn't" | "'ve'n't"
+g.HAVENT[2] = Literal("haven't") | "hasn't" | "'ven't"
 
 g.CAN[2] = "can"
 g.CANT[2] = Literal("cannot") | "can't"
