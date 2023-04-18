@@ -191,7 +191,7 @@ key is 35
 
 ### Numbers
 
-There are decimal integer literals, such as `102`, `-4` `0`, and, as expected, some other:
+There are decimal integer literals, such as `102`, `-4`, `0`, and, as expected, some other:
 
 - Binary (2) with `0b` prefix: `0b10010`
 - Octal (8) with `0o` prefix: `0o755`
