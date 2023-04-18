@@ -1,4 +1,4 @@
-# WTFL — Well-Designed Text-based Friendly Language
+# WTFL — Well-designed Text-based Friendly Language
 
 This is a spec for a very well-designed declarative language and a Python package to work with it.    
 Obviously, current solutions for config et al. (JSON, YAML, TOML) are very unsuitable as software development progress is going on, so here I propose a brand new format.   
