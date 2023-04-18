@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "wtfl"
+version = "1.0.0"
+description = ""
+authors = ["Dmitry Gritsenko <k01419q45@ya.ru>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+lark = "^1.1.5"
+lark-dynamic = "^1.0.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
