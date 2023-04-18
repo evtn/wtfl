@@ -52,7 +52,7 @@ Here's a list (keywords in the same list entry are equivalent and used interchan
 - `that` / `this` / `these` / `those`
 - `there`
 - `have` / `has` / `'ve`
-- `haven't` / `hasn't` / `'ve'n't`
+- `haven't` / `hasn't` / `'ven't`
 - `can`
 - `cannot` / `can't`
 - `true` / `falsen't`
