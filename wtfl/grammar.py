@@ -104,7 +104,7 @@ g.NAME_CHARS = RegExp("[A-Za-z0-9_-]")
 
 g.NAME = g.NAME_START, Some(g.NAME_CHARS)
 
-g._name = g.NAME | g._keyword_name | g.key_prefix
+g._name = g.NAME | g._keyword_name
 
 g.value = g._atom | g.empty_array | g.object | g.array
 g._atom = g.number | g.bool | g.string | g.none
