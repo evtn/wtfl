@@ -6,7 +6,6 @@ from lark_dynamic import (
     Group,
     Literal,
     Many,
-    ManySeparated,
     Maybe,
     Modifier,
     RegExp,
@@ -16,32 +15,50 @@ from lark_dynamic import (
 
 g = Grammar()
 
-g.WS = Many(Literal(" ") | r"\n")
+g.WS = RegExp(r"\s+")
 g.COMMENT = RegExp(r"\.\.\..*\n?")
 g.make_directive("ignore", g.WS)
 g.make_directive("ignore", g.COMMENT)
 
-g.AND[3] = "and"
-g.BUT[2] = "but"
-g.IS[2] = Literal("is") | "are" | "'s" | "'re" | "do" | "does" | "be"
-g.ISNT[2] = Literal("isn't") | "aren't" | "'sn't" | "'ren't"
+g.AND[3] = Literal("and", "i")
+g.BUT[2] = Literal("but", "i")
+g.IS[2] = (
+    Literal("is", "i")
+    | Literal("are", "i")
+    | Literal("'s", "i")
+    | Literal("'re", "i")
+    | Literal("do", "i")
+    | Literal("does", "i")
+    | Literal("be", "i")
+)
+g.ISNT[2] = (
+    Literal("isn't", "i")
+    | Literal("aren't", "i")
+    | Literal("'sn't", "i")
+    | Literal("'ren't", "i")
+)
 
-g.OF[2] = "of"
-g.THAT[2] = Literal("that") | "this" | "these" | "those"
-g.THERE[2] = "there"
-g.HAVE[2] = Literal("have") | "has" | "'ve"
-g.HAVENT[2] = Literal("haven't") | "hasn't" | "'ven't"
+g.OF[2] = Literal("of", "i")
+g.THAT[2] = (
+    Literal("that", "i")
+    | Literal("this", "i")
+    | Literal("these", "i")
+    | Literal("those", "i")
+)
+g.THERE[2] = Literal("there", "i")
+g.HAVE[2] = Literal("have", "i") | Literal("has", "i") | Literal("'ve", "i")
+g.HAVENT[2] = Literal("haven't", "i") | Literal("hasn't", "i") | Literal("'ven't", "i")
 
-g.CAN[2] = "can"
-g.CANT[2] = Literal("cannot") | "can't"
-g.BOOL[2] = RegExp(r"(true|false)(n't)?")
-g.RETURN[2] = "return"
-g.SKIP[2] = "skip"
-g.STAY[2] = "stay"
-g.TO[2] = "to"
+g.CAN[2] = Literal("can", "i")
+g.CANT[2] = Literal("cannot", "i") | Literal("can't", "i")
+g.BOOL[2] = RegExp(r"(true|false)(n't)?", "i")
+g.RETURN[2] = Literal("return", "i")
+g.SKIP[2] = Literal("skip", "i")
+g.STAY[2] = Literal("stay", "i")
+g.TO[2] = Literal("to", "i")
 
 
-g.PREFIX[2] = RegExp(r"\b(an?|the|d[eu]|l[ea]|des|les|um)\b")
+g.PREFIX[2] = RegExp(r"\b(an?|the|d[eu]|l[ea]|des|les|um)\b", "i")
 
 g._keyword_name = (
     g.IS
@@ -59,10 +76,9 @@ g._keyword_name = (
     | g.TO
 )
 
-g.file = Some(g.statement | g._inline_statements)
+g.file = SomeSeparated(Maybe(g.also), g.statement), Maybe(g.also)
 
-g.also = Maybe(g.AND | g.BUT), "also"
-g._inline_statements = ManySeparated(g.also, g.statement)
+g.also = Maybe(g.AND | g.BUT), Literal("also", "i")
 
 g.statement = g.assign_key | g.time_travel | g.constraint
 
@@ -100,8 +116,8 @@ g.object = g.HAVE, Some(g.assign_key), g.OBJECT_TAIL
 g.array = g.HAVE, Many(g.value), g.OBJECT_TAIL
 g.empty_array = g.HAVE, "0"
 
-g.OBJECT_TAIL[3] = Group(g.THERE | g.THAT), g.TAIL_OTHER
-g.TAIL_OTHER = RegExp(r".+?(?=also|\n|$)")
+g.OBJECT_TAIL[3] = Group(g.THERE | g.THAT), Maybe(g.TAIL_OTHER)
+g.TAIL_OTHER = RegExp(r".+?(?=also|\n|$)", "i")
 
 g.number = g.negative
 

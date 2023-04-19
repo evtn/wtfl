@@ -10,12 +10,13 @@ from .internal_types import (
     SupportsRead,
     Value,
 )
-from .parser import parse, Assign
 
 StateValue = Union[str, float, bool, None, "Store"]
 PythonValue = Union[
     str, float, bool, None, Dict[str, "PythonValue"], List["PythonValue"]
 ]
+
+from .parser import ParseFunc, ParseFuncs, parse, Assign
 
 
 class Store:
@@ -117,6 +118,11 @@ class ReadState:
 
         last_key = path[-1]
 
+        if isinstance(value, Object):
+            if not value.pairs:
+                store[last_key] = Store()
+                return
+
         assert not isinstance(value, Object)
 
         store[last_key] = value
@@ -175,9 +181,13 @@ class ReadState:
 
 
 class Reader:
-    def read(self, s: str) -> ReadState:
+    def read(
+        self,
+        s: str,
+        parse_funcs: ParseFuncs,
+    ) -> ReadState:
         state = ReadState()
-        tree = parse(s.lower())
+        tree = parse(s, parse_funcs)
 
         statements: List[Tuple[Operation, int]] = []
 
@@ -211,10 +221,32 @@ class Reader:
             state.add_constraint(operation)
 
 
-def loads(s: str) -> PythonValue:
-    state: ReadState = Reader().read(s)
+def loads(
+    s: str,
+    *,
+    parse_float: ParseFunc | None = None,
+    parse_int: ParseFunc | None = None,
+    parse_roman: ParseFunc | None = None,
+    parse_numbers: ParseFunc | None = None,
+) -> PythonValue:
+    state: ReadState = Reader().read(
+        s, (parse_float, parse_int, parse_roman, parse_numbers)
+    )
     return state.to_dict()
 
 
-def load(file: SupportsRead[str]) -> PythonValue:
-    return loads(file.read())
+def load(
+    file: SupportsRead[str],
+    *,
+    parse_float: ParseFunc | None = None,
+    parse_int: ParseFunc | None = None,
+    parse_roman: ParseFunc | None = None,
+    parse_numbers: ParseFunc | None = None,
+) -> PythonValue:
+    return loads(
+        file.read(),
+        parse_float=parse_float,
+        parse_int=parse_int,
+        parse_roman=parse_roman,
+        parse_numbers=parse_numbers,
+    )
