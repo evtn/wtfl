@@ -43,7 +43,7 @@ def wtfl.loads(
     parse_numbers, # function for integer literals parsing (0b..., 0o..., and so on)
 ) -> 
 ```
-read an object from a file (same argument meaning as `.loads`):
+read an object from a file (same argument meaning as `.loads`):    
 `wtfl.load(file, *, parse_float, parse_int, parse_roman, parse_numbers)` 
 
 dump an object into a string:
@@ -68,7 +68,7 @@ def wtfl.dumps(
     sort_keys: bool = False,
 )
 ```
-dump an object into a file (same argument meaning as `.dumps()`):
+dump an object into a file (same argument meaning as `.dumps()`):    
 `wtfl.dump(file, obj, *, skipkeys, ensure_ascii, indent, default, sort_keys)`
 
 # Reserved keywords
