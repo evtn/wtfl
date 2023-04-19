@@ -1,5 +1,5 @@
-from typing import Callable, Dict, List, Tuple
 from __future__ import annotations
+from typing import Callable, Dict, List, Tuple
 from .internal_types import SupportsWrite
 from .reader import PythonValue
 from json import dumps as jd
