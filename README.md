@@ -32,12 +32,44 @@ This is equivalent to this JSON:
 
 Package's API is similar to built-in `json`:
 
-- `wtfl.loads(str)` reads an object from a string
-- `wtfl.load(file)` reads an object from a file
-- `wtfl.dumps(obj)` dumps an object into a string
-- `wtfl.dump(file, obj)` dumps an object into a file
+read an object from a string:
+```python
+def wtfl.loads(
+    s, # string to load
+    *,
+    parse_float, # function for float parsing, `float` used by default
+    parse_int, # function for integer parsing (only unprefixed decimal), `int` used by default
+    parse_roman, # function for roman numerals parsing, accepts whole literal as a string (0r...)
+    parse_numbers, # function for integer literals parsing (0b..., 0o..., and so on)
+) -> 
+```
+read an object from a file (same argument meaning as `.loads`):
+`wtfl.load(file, *, parse_float, parse_int, parse_roman, parse_numbers)` 
 
-Current reader and writer are fairly simple, later versions would probably improve configurability
+dump an object into a string:
+```python
+def wtfl.dumps(
+    obj: object, # object to dump
+    *,
+    # if True, non-serializable keys / values are skipped
+    skipkeys: bool = False, 
+    
+    # if True, encodes non-ASCII characters
+    ensure_ascii: bool = True, 
+    
+    # if a non-negative integer, used as indent size. if a string, used as indent character. If None, everything is inlined
+    indent: int | str | None = 2, 
+    
+    # a function that is used to recover from serialization errors. 
+    # if current value is not serializable and skipkeys=False, tries to serialize the result of default(value)
+    default: Callable[[object], str] | None = None, 
+    
+    # if True, sorts object keys
+    sort_keys: bool = False,
+)
+```
+dump an object into a file (same argument meaning as `.dumps()`):
+`wtfl.dump(file, obj, *, skipkeys, ensure_ascii, indent, default, sort_keys)`
 
 # Reserved keywords
 

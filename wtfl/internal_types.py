@@ -82,6 +82,8 @@ class Object:
         return f'[{",".join(map(repr, self.pairs))}]'
 
     def flatten_paths(self, prefix: KeyChain) -> List[Assign]:
+        if not self.pairs:
+            return [Assign(prefix, self)]
         new_pairs = []
         for pair in self.pairs:
             new_pairs.extend(pair.unwind(prefix))
