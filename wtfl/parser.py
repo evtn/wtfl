@@ -91,6 +91,9 @@ def parse_roman(s: str) -> PythonValue:
 
 
 def parse_numbers(s: str) -> PythonValue:
+    if s[1] == "u":
+        return len(s) - 2
+
     bases = {
         "b": 2,
         "o": 8,
@@ -117,7 +120,7 @@ class WTFLTransformer(Transformer):
         return WTFLTransformer.parse_int(s)
 
     def integer(self, tokens):
-        return int(tokens[0])
+        return WTFLTransformer.parse_int(tokens[0])
 
     def negative(self, tokens):
         return -tokens[1]
@@ -138,6 +141,9 @@ class WTFLTransformer(Transformer):
         return WTFLTransformer.parse_numbers(tokens[0])
 
     def vigesimal(self, tokens):
+        return WTFLTransformer.parse_numbers(tokens[0])
+
+    def unary_int(self, tokens):
         return WTFLTransformer.parse_numbers(tokens[0])
 
     def string(self, tokens):
