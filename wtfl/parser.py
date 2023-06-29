@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 import codecs
-from typing import Callable, List, Dict, Tuple
+from typing import Callable, List, Dict, Optional, Tuple
 
 from lark import Lark, Transformer
 from lark.exceptions import UnexpectedCharacters, UnexpectedToken
@@ -250,5 +250,8 @@ from .reader import PythonValue
 
 ParseFunc = Callable[[str], PythonValue]
 ParseFuncs = Tuple[
-    ParseFunc | None, ParseFunc | None, ParseFunc | None, ParseFunc | None
+    Optional[ParseFunc],
+    Optional[ParseFunc],
+    Optional[ParseFunc],
+    Optional[ParseFunc],
 ]
